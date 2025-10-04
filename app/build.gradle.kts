@@ -1,3 +1,5 @@
+import com.android.tools.r8.internal.kt
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -40,8 +42,8 @@ android {
 }
 
 dependencies {
-// https://mvnrepository.com/artifact/io.coil-kt/coil
-    implementation(libs.coil)
+// https://mvnrepository.com/artifact/io.coil-kt.coil3/coil-compose
+    implementation(libs.coil.kt.coil.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
