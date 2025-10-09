@@ -51,16 +51,12 @@ class MainActivity : ComponentActivity() {
                     LazyColumn (
                         modifier = Modifier
                             .padding(innerPadding)
-
                     ){
                         items(ChampionRepository.champions) {champion ->
                             ChampionCard(champion = champion)
                         }
                     }
-
                 }
-
-
             }
         }
     }
