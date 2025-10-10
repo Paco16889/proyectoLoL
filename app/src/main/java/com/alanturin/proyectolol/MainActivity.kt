@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.ScrollableDefaults
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.layout.Arrangement
@@ -35,9 +36,11 @@ import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.alanturin.proyectolol.data.ChampionRepository
 import com.alanturin.proyectolol.model.Champion
+import androidx.navigation.compose.NavHost
 
 import com.alanturin.proyectolol.ui.theme.ProyectoLoLTheme
 
@@ -46,18 +49,32 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            ProyectoLoLTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    LazyColumn (
-                        modifier = Modifier
-                            .padding(innerPadding)
-                    ){
-                        items(ChampionRepository.champions) {champion ->
-                            ChampionCard(champion = champion)
+
+            val navController = rememberNavController()
+
+            NavHost(
+                navController = navController,
+                startDestination = Routes.CHAMPION_LIST
+            ){
+                ProyectoLoLTheme {
+                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                        LazyColumn (
+                            modifier = Modifier
+                                .padding(innerPadding)
+                        ){
+                            items(ChampionRepository.champions) {champion ->
+                                ChampionCard(
+                                    champion = champion,
+                                    onClick = {
+                                        navController.navigate(Routes.createChampionDetailRoute( champion.nombre))
+                                    }
+                                )
+                            }
                         }
                     }
                 }
             }
+
         }
     }
 }
@@ -65,7 +82,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun ChampionCard(champion: Champion){
+fun ChampionCard(champion: Champion, onClick: () -> Unit){
     Card (
         modifier = Modifier
             .padding(8.dp)
@@ -75,7 +92,9 @@ fun ChampionCard(champion: Champion){
 
     ){
         Row (
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier
+                .padding(8.dp)
+                .clickable { onClick() }
         ){
             AsyncImage(
                 model = champion.imgUrl,
