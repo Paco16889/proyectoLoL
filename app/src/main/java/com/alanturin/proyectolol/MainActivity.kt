@@ -41,6 +41,7 @@ import coil.compose.AsyncImage
 import com.alanturin.proyectolol.data.ChampionRepository
 import com.alanturin.proyectolol.model.Champion
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 
 import com.alanturin.proyectolol.ui.theme.ProyectoLoLTheme
 
@@ -50,30 +51,38 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-            val navController = rememberNavController()
 
-            NavHost(
-                navController = navController,
-                startDestination = Routes.CHAMPION_LIST
-            ){
                 ProyectoLoLTheme {
+                    val navController = rememberNavController()
+
                     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                        LazyColumn (
-                            modifier = Modifier
-                                .padding(innerPadding)
+
+                        NavHost(
+                            navController = navController,
+                            startDestination = Routes.CHAMPION_LIST
                         ){
-                            items(ChampionRepository.champions) {champion ->
-                                ChampionCard(
-                                    champion = champion,
-                                    onClick = {
-                                        navController.navigate(Routes.createChampionDetailRoute( champion.nombre))
+                            composable(Routes.CHAMPION_LIST) {
+                                LazyColumn (
+                                    modifier = Modifier
+                                        .padding(innerPadding)
+                                ) {
+                                    items(ChampionRepository.champions) { champion ->
+                                        ChampionCard(
+                                            champion = champion,
+                                            onClick = {
+                                                navController.navigate(
+                                                    Routes.createChampionDetailRoute(
+                                                        champion.nombre
+                                                    )
+                                                )
+                                            }
+                                        )
                                     }
-                                )
+                                }
                             }
                         }
                     }
                 }
-            }
 
         }
     }

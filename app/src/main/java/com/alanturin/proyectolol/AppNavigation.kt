@@ -12,41 +12,7 @@ import com.alanturin.proyectolol.data.ChampionRepository
 
 object Routes {
     const val CHAMPION_LIST = "champions"
-    const val CHAMPION_DETAIL = "championDetail/"
+    const val CHAMPION_DETAIL = "championDetail/{championNombre}"
 
     fun createChampionDetailRoute(championNombre: String) = "championDetail/$championNombre"
-}
-
-@Composable
-fun AppNavigation() {
-    val navController = rememberNavController()
-
-    NavHost(
-        navController = navController,
-        startDestination = Routes.CHAMPION_LIST
-    ){
-        composable(Routes.CHAMPION_LIST) {
-            LazyColumn {
-                items(ChampionRepository.champions) { champion ->
-                    ChampionItem(
-                        champion = champion,
-                        onClick = {
-                            navController.navigate(Routes.createChampionDetailRoute(champion.nombre))
-                        }
-                    )
-
-                }
-            }
-        }
-
-        composable(
-            route = Routes.CHAMPION_DETAIL,
-            arguments = listOf(navArgument("championName") { type = NavType.StringType})
-        ){
-            backStackEntry ->
-            val championNombre = backStackEntry.arguments?.getString(("championName"))
-            requireNotNull(championNombre) { "El nombre del campeón no puede ser nulo" }
-            RenderChampion(champion.nombre)
-        }
-    }
 }
