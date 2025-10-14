@@ -36,12 +36,14 @@ import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavType
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.alanturin.proyectolol.data.ChampionRepository
 import com.alanturin.proyectolol.model.Champion
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 
 import com.alanturin.proyectolol.ui.theme.ProyectoLoLTheme
 
@@ -61,7 +63,9 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             startDestination = Routes.CHAMPION_LIST
                         ){
-                            composable(Routes.CHAMPION_LIST) {
+                            composable(
+                                route = Routes.CHAMPION_LIST
+                            ) {
                                 LazyColumn (
                                     modifier = Modifier
                                         .padding(innerPadding)
@@ -80,6 +84,21 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                             }
+                            composable(
+                                route = Routes.CHAMPION_DETAIL,
+                                arguments = listOf(navArgument("championNombre") { type = NavType.StringType})
+                            ){ backStackEntry ->
+                                val championNombre = backStackEntry.arguments?.getString("championNombre")
+                                val champion = ChampionRepository.champions.find { it.nombre == championNombre }
+
+                                if (champion != null){
+                                    RenderChampion(champion)
+                                }else{
+                                    Text("No se en contro ese Campeón")
+                                }
+
+                            }
+
                         }
                     }
                 }
