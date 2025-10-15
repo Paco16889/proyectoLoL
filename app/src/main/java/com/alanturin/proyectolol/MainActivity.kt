@@ -92,7 +92,7 @@ class MainActivity : ComponentActivity() {
                                 val champion = ChampionRepository.champions.find { it.nombre == championNombre }
 
                                 if (champion != null){
-                                    RenderChampion(champion)
+                                    RenderChampion(champion, navController)
                                 }else{
                                     Text("No se en contro ese Campeón")
                                 }
